@@ -1,0 +1,533 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// ZMK Studio — Component Stylesheet
+//
+// Naming convention: BEM  →  .block__element--modifier
+// Inheritance:  %placeholder extends define shared structural and visual
+//               patterns; component classes @extend them so layout rules
+//               are never duplicated across blocks.
+// ─────────────────────────────────────────────────────────────────────────────
+
+
+// ── Layout Primitives ─────────────────────────────────────────────────────────
+
+%flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+%flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+%flex-fill {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+%full-height {
+  @extend %flex-col;
+  height: 100%;
+}
+
+%scroll-x {
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+%absolute-fill {
+  position: absolute;
+  inset: 0;
+}
+
+
+// ── Visual Primitives ─────────────────────────────────────────────────────────
+
+%surface {
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+%card-surface {
+  background: var(--color-card);
+  color: var(--color-card-foreground);
+}
+
+%border-bottom {
+  border-bottom: 1px solid var(--color-border);
+}
+
+%border-top {
+  border-top: 1px solid var(--color-border);
+}
+
+%panel {
+  @extend %card-surface;
+  @extend %border-top;
+  flex-shrink: 0;
+}
+
+
+// ── Form Primitives ───────────────────────────────────────────────────────────
+
+%form-field {
+  @extend %flex-col;
+  gap: 4px;
+}
+
+%form-label {
+  font-size: 11px;
+  color: var(--color-muted-foreground);
+  line-height: 1.4;
+}
+
+%form-control {
+  height: 32px;
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-input);
+  color: var(--color-foreground);
+  padding: 0 8px;
+  font-size: 13px;
+  font-family: inherit;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-ring);
+  }
+}
+
+%status-text {
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+%status-success {
+  @extend %status-text;
+  color: var(--color-success, #22c55e);
+}
+
+%status-error {
+  @extend %status-text;
+  color: var(--color-destructive);
+}
+
+%status-warning {
+  @extend %status-text;
+  color: var(--color-warning, #eab308);
+}
+
+
+// ── App Shell ─────────────────────────────────────────────────────────────────
+// Outermost layout shell — wraps every screen.
+
+.app-shell {
+  @extend %full-height;
+  @extend %surface;
+}
+
+
+// ── Connect Screen ────────────────────────────────────────────────────────────
+
+.connect-screen {
+  @extend %full-height;
+  @extend %surface;
+  gap: 16px;
+  padding: 16px;
+
+  &__header {
+    @extend %flex-row;
+    justify-content: space-between;
+  }
+
+  &__title {
+    font-size: 13px;
+    font-weight: 600;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__error {
+    @extend %status-error;
+    border-radius: var(--radius-md);
+    border: 1px solid color-mix(in srgb, var(--color-destructive) 30%, transparent);
+    background: color-mix(in srgb, var(--color-destructive) 10%, transparent);
+    padding: 8px 12px;
+  }
+
+  &__port-list {
+    @extend %flex-col;
+    @extend %flex-fill;
+    gap: 8px;
+  }
+
+  &__hint {
+    @extend %status-text;
+    color: var(--color-muted-foreground);
+  }
+}
+
+
+// ── Lock Screen ───────────────────────────────────────────────────────────────
+
+.lock-screen {
+  @extend %full-height;
+  @extend %surface;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px;
+
+  &__message {
+    font-size: 13px;
+    color: var(--color-muted-foreground);
+    text-align: center;
+  }
+}
+
+
+// ── Keyboard Editor ───────────────────────────────────────────────────────────
+// Three-zone vertical layout: toolbar / layer-tabs / canvas+binding.
+
+.keyboard-editor {
+  @extend %full-height;
+  @extend %surface;
+
+  &__toolbar {
+    @extend %flex-row;
+    @extend %border-bottom;
+    gap: 8px;
+    padding: 8px 12px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+
+  &__device-name {
+    @extend %flex-fill;
+    font-size: 11px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__saved-label {
+    @extend %status-success;
+    font-weight: 500;
+  }
+
+  &__layer-tabs {
+    @extend %flex-row;
+    @extend %border-bottom;
+    @extend %scroll-x;
+    gap: 4px;
+    padding: 6px 12px;
+  }
+
+  &__layer-tab {
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: var(--radius-md);
+    border: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 150ms, color 150ms;
+
+    &--active {
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+    }
+
+    &--inactive {
+      background: var(--color-muted);
+      color: var(--color-muted-foreground);
+
+      &:hover {
+        background: var(--color-accent);
+        color: var(--color-accent-foreground);
+      }
+    }
+  }
+
+  &__canvas {
+    @extend %flex-fill;
+    overflow: auto;
+  }
+
+  &__canvas-inner {
+    padding: 16px;
+    overflow-x: auto;
+  }
+
+  &__loading {
+    @extend %flex-row;
+    justify-content: center;
+    height: 128px;
+    @extend %status-text;
+    color: var(--color-muted-foreground);
+  }
+
+  &__error {
+    @extend %status-error;
+    margin: 16px;
+  }
+
+  &__binding-panel {
+    flex-shrink: 0;
+  }
+}
+
+
+// ── Binding Editor ────────────────────────────────────────────────────────────
+
+.binding-editor {
+  @extend %flex-col;
+  @extend %panel;
+  gap: 12px;
+  padding: 12px;
+
+  &__header {
+    @extend %flex-row;
+    justify-content: space-between;
+  }
+
+  &__key-label {
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  &__status-applied {
+    @extend %status-success;
+  }
+
+  &__field {
+    @extend %form-field;
+  }
+
+  &__field-label {
+    @extend %form-label;
+  }
+
+  &__select {
+    @extend %form-control;
+  }
+
+  &__actions {
+    @extend %flex-row;
+    gap: 8px;
+  }
+
+  &__config-section {
+    @extend %flex-col;
+    gap: 8px;
+    padding-top: 4px;
+    @extend %border-top;
+  }
+
+  &__config-header {
+    @extend %flex-row;
+    justify-content: space-between;
+  }
+
+  &__config-title {
+    @extend %form-label;
+    font-weight: 500;
+  }
+
+  &__config-no-file {
+    @extend %status-warning;
+  }
+}
+
+
+// ── Config Number Input ────────────────────────────────────────────────────────
+// Used inside BindingEditor for .conf options like mouse speed.
+
+.config-number-input {
+  @extend %form-field;
+
+  &__header {
+    @extend %flex-row;
+    justify-content: space-between;
+  }
+
+  &__label {
+    @extend %form-label;
+  }
+
+  &__error {
+    @extend %status-error;
+  }
+
+  &__saved {
+    @extend %status-success;
+    transition: opacity 150ms;
+  }
+
+  &__input {
+    @extend %form-control;
+    appearance: textfield;
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+
+    &--error {
+      border-color: var(--color-destructive);
+
+      &:focus {
+        box-shadow: 0 0 0 2px var(--color-destructive);
+      }
+    }
+  }
+}
+
+
+// ── Parameter Input ───────────────────────────────────────────────────────────
+
+.param-input {
+  @extend %form-field;
+
+  &__label {
+    @extend %form-label;
+  }
+
+  &__select {
+    @extend %form-control;
+  }
+}
+
+
+// ── HID Key Picker ────────────────────────────────────────────────────────────
+
+.hid-picker {
+  @extend %flex-col;
+  gap: 8px;
+
+  &__select {
+    @extend %form-control;
+  }
+
+  &__modifiers {
+    @extend %flex-row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  &__mod-btn {
+    padding: 2px 8px;
+    border-radius: var(--radius-md);
+    font-size: 11px;
+    font-family: inherit;
+    border: 1px solid;
+    cursor: pointer;
+    transition: background 150ms, color 150ms, border-color 150ms;
+
+    &--active {
+      background: var(--color-primary);
+      color: var(--color-primary-foreground);
+      border-color: var(--color-primary);
+    }
+
+    &--inactive {
+      background: transparent;
+      color: var(--color-muted-foreground);
+      border-color: var(--color-border);
+
+      &:hover {
+        border-color: var(--color-foreground);
+        color: var(--color-foreground);
+      }
+    }
+  }
+}
+
+
+// ── Keyboard Layout ───────────────────────────────────────────────────────────
+
+.keyboard-layout {
+  transform-origin: top left;
+
+  &__inner {
+    position: relative;
+  }
+}
+
+
+// ── Key Cap ───────────────────────────────────────────────────────────────────
+
+.key-cap {
+  position: relative;
+  @extend %flex-col;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-key);
+  border: 1px solid;
+  cursor: pointer;
+  transition: transform 150ms, box-shadow 150ms;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--color-ring);
+  }
+
+  &:hover {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 15%);
+    transform: scale(1.1);
+    z-index: 10;
+  }
+
+  &--selected {
+    background: var(--color-primary);
+    color: var(--color-primary-foreground);
+    border-color: var(--color-primary);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 15%);
+    transform: scale(1.1);
+    z-index: 10;
+  }
+
+  &--default {
+    background: var(--color-key);
+    color: var(--color-key-foreground);
+    border-color: var(--color-key-border);
+
+    &:hover {
+      background: var(--color-accent);
+      color: var(--color-accent-foreground);
+    }
+  }
+
+  &__header {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 9px;
+    line-height: 1;
+    opacity: 0.7;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 2px;
+  }
+
+  &__label {
+    font-size: 11px;
+    line-height: 1.25;
+    font-weight: 500;
+    text-align: center;
+    padding: 0 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+}

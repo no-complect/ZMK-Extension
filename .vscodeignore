@@ -1,0 +1,45 @@
+node_modules/**
+src/**
+webview/**
+native/**
+webpack.config.js
+tsconfig*.json
+postcss.config.cjs
+.eslintrc*
+.prettierrc*
+.vscode/**
+**/*.map
+**/*.ts
+**/*.log
+zmk-config/**
+west-workspace/**
+keymaps/**
+
+# Keep compiled output and native binary
+!dist/**
+!bin/**
+
+# ── Runtime native dependencies (serialport + noble) ─────────────────────────
+# These are webpack externals — loaded at runtime, not bundled into extension.js
+
+!node_modules/serialport/**
+!node_modules/@serialport/bindings-cpp/**
+!node_modules/@serialport/bindings-interface/**
+!node_modules/@serialport/binding-mock/**
+!node_modules/@serialport/stream/**
+!node_modules/@serialport/parser-byte-length/**
+!node_modules/@serialport/parser-cctalk/**
+!node_modules/@serialport/parser-delimiter/**
+!node_modules/@serialport/parser-inter-byte-timeout/**
+!node_modules/@serialport/parser-packet-length/**
+!node_modules/@serialport/parser-readline/**
+!node_modules/@serialport/parser-ready/**
+!node_modules/@serialport/parser-regex/**
+!node_modules/@serialport/parser-slip-encoder/**
+!node_modules/@serialport/parser-spacepacket/**
+!node_modules/@abandonware/noble/**
+!node_modules/debug/**
+!node_modules/ms/**
+!node_modules/node-gyp-build/**
+!node_modules/node-addon-api/**
+!node_modules/napi-thread-safe-callback/**
