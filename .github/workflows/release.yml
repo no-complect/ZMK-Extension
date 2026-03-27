@@ -46,6 +46,7 @@ jobs:
       - name: Build universal native binary
         if: steps.check.outputs.exists == 'false'
         run: |
+          mkdir -p bin
           clang -fobjc-arc -framework CoreBluetooth -framework Foundation \
             -target arm64-apple-macos11 \
             -o bin/zmk-ble-helper-arm64 native/zmk-ble-helper.m
