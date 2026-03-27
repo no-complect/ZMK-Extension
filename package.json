@@ -1,0 +1,156 @@
+{
+  "name": "zmk-studio-vscode",
+  "displayName": "ZMK Studio",
+  "description": "Visual ZMK keymap editor — configure your keyboard live via USB or Bluetooth",
+  "version": "0.0.1",
+  "publisher": "zmk-studio",
+  "engines": {
+    "vscode": "^1.94.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "extensionKind": [
+    "ui"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "zmk-studio.openPanel",
+        "title": "Open Keyboard Editor",
+        "category": "ZMK"
+      },
+      {
+        "command": "zmk-studio.connectUSB",
+        "title": "Connect via USB",
+        "category": "ZMK"
+      },
+      {
+        "command": "zmk-studio.showLog",
+        "title": "Show Extension Log",
+        "category": "ZMK"
+      },
+      {
+        "command": "zmk-studio.selectConfigFile",
+        "title": "Select Configuration File",
+        "category": "ZMK"
+      },
+      {
+        "command": "zmk-studio.exportConfigFile",
+        "title": "Export Configuration File",
+        "category": "ZMK"
+      },
+      {
+        "command": "zmk-studio.importKeymap",
+        "title": "Import Keymap",
+        "category": "ZMK"
+      },
+      {
+        "command": "zmk-studio.buildFirmware",
+        "title": "Build Firmware",
+        "category": "ZMK"
+      },
+      {
+        "command": "zmk-studio.setWestWorkspace",
+        "title": "Set West Workspace",
+        "category": "ZMK"
+      },
+      {
+        "command": "zmk-studio.clearCachedBoard",
+        "title": "Clear Cached Board/Shield",
+        "category": "ZMK"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "zmk-studio",
+          "title": "ZMK Studio",
+          "icon": "media/zmk-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "zmk-studio": [
+        {
+          "type": "webview",
+          "id": "zmk-studio.keyboardPanel",
+          "name": "Keyboard Editor",
+          "when": "true"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "id": "dts",
+        "aliases": [
+          "Devicetree",
+          "ZMK Keymap"
+        ],
+        "extensions": [
+          ".keymap"
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build:native && npm run build",
+    "build:native": "clang -fobjc-arc -framework CoreBluetooth -framework Foundation -o bin/zmk-ble-helper native/zmk-ble-helper.m",
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development --watch",
+    "dev:full": "npm run build:native && npm run dev",
+    "build:ext": "webpack --mode development --config webpack.config.js --env target=ext",
+    "build:webview": "webpack --mode development --config webpack.config.js --env target=webview",
+    "test:parser": "npx tsx src/__tests__/ZmkConfigParser.test.ts",
+    "test:detector": "npx tsx src/__tests__/ZmkConfigDetector.test.ts",
+    "test": "npm run test:parser && npm run test:detector",
+    "package": "npm run build:native && npm run build && npx @vscode/vsce package --allow-missing-repository",
+    "install:vscode": "npm run package && code --install-extension zmk-studio-vscode-0.0.1.vsix",
+    "install:cursor": "npm run package && cursor --install-extension zmk-studio-vscode-0.0.1.vsix",
+    "setup:west": "west init -m https://github.com/zmkfirmware/zmk --mr main --mf app/west.yml west-workspace && cd west-workspace && west update",
+    "setup": "npm install && npm run vscode:prepublish",
+    "clean": "rm -rf node_modules dist bin/zmk-ble-helper keymaps *.vsix"
+  },
+  "dependencies": {
+    "@abandonware/noble": "^1.9.2-26",
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "@tailwindcss/postcss": "^4.2.2",
+    "@zmkfirmware/zmk-studio-ts-client": "^0.0.18",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "js-yaml": "^4.1.1",
+    "lucide-react": "^0.577.0",
+    "postcss": "^8.5.8",
+    "postcss-loader": "^8.2.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "serialport": "^12.0.0",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^3.6.0",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@types/vscode": "^1.94.0",
+    "css-loader": "^7.1.2",
+    "sass": "^1.98.0",
+    "sass-loader": "^16.0.7",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.1",
+    "run-script-os": "^1.1.6",
+    "tsx": "^4.21.0",
+    "typescript": "^5.6.0",
+    "webpack": "^5.95.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

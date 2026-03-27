@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+/*
+ * VS Code → ZMK Studio design token bridge.
+ *
+ * VS Code injects --vscode-* CSS variables into the WebView automatically
+ * and updates them instantly when the user changes their theme.
+ * We map them here to semantic tokens consumed by Tailwind and our UI components.
+ *
+ * Body carries one of: vscode-dark | vscode-light | vscode-high-contrast
+ * and data-vscode-theme-id="<theme name>" for fine-grained targeting.
+ */
+
+@theme {
+  /* ── Surfaces ─────────────────────────────────────────────────────────── */
+  --color-background:        var(--vscode-editor-background);
+  --color-foreground:        var(--vscode-editor-foreground);
+
+  --color-card:              var(--vscode-editorWidget-background, var(--vscode-editor-background));
+  --color-card-foreground:   var(--vscode-editor-foreground);
+
+  --color-popover:           var(--vscode-editorWidget-background, var(--vscode-editor-background));
+  --color-popover-foreground: var(--vscode-editor-foreground);
+
+  /* ── Interactive ──────────────────────────────────────────────────────── */
+  --color-primary:           var(--vscode-button-background);
+  --color-primary-foreground: var(--vscode-button-foreground);
+
+  --color-secondary:         var(--vscode-button-secondaryBackground, var(--vscode-input-background));
+  --color-secondary-foreground: var(--vscode-button-secondaryForeground, var(--vscode-editor-foreground));
+
+  --color-accent:            var(--vscode-list-hoverBackground);
+  --color-accent-foreground: var(--vscode-list-hoverForeground, var(--vscode-editor-foreground));
+
+  --color-destructive:       var(--vscode-editorError-foreground, #f44747);
+  --color-destructive-foreground: var(--vscode-editor-background);
+
+  /* ── Forms & chrome ───────────────────────────────────────────────────── */
+  --color-muted:             var(--vscode-input-background);
+  --color-muted-foreground:  var(--vscode-input-placeholderForeground, var(--vscode-disabledForeground));
+
+  --color-border:            var(--vscode-panel-border, var(--vscode-widget-border, color-mix(in srgb, var(--vscode-editor-foreground) 15%, transparent)));
+  --color-input-border:      var(--vscode-input-border, var(--vscode-panel-border, var(--vscode-widget-border, color-mix(in srgb, var(--vscode-editor-foreground) 25%, transparent))));
+  --color-input:             var(--vscode-input-background);
+  --color-ring:              var(--vscode-focusBorder);
+
+  /* ── Key cap surface (keyboard-specific) ─────────────────────────────── */
+  --color-key:               var(--vscode-editorGroupHeader-tabsBackground, var(--vscode-tab-inactiveBackground));
+  --color-key-foreground:    var(--vscode-tab-inactiveForeground, var(--vscode-editor-foreground));
+  --color-key-active:        var(--vscode-tab-activeBackground, var(--vscode-editor-background));
+  --color-key-active-foreground: var(--vscode-tab-activeForeground, var(--vscode-editor-foreground));
+  --color-key-border:        var(--vscode-tab-border, var(--vscode-panel-border));
+
+  /* ── Typography ───────────────────────────────────────────────────────── */
+  --font-sans:               var(--vscode-font-family);
+  --font-mono:               var(--vscode-editor-font-family);
+
+  /* ── Geometry ─────────────────────────────────────────────────────────── */
+  --radius-sm:  2px;
+  --radius-md:  4px;
+  --radius-lg:  6px;
+  --radius-key: 5px;
+}
+
+/*
+ * Base reset — inherit VS Code's font stack so text feels native.
+ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size, 13px);
+  font-weight: var(--vscode-font-weight, normal);
+  color: var(--vscode-editor-foreground);
+  background: var(--vscode-editor-background);
+  -webkit-font-smoothing: antialiased;
+}
+
+/*
+ * High-contrast overrides — VS Code sets body.vscode-high-contrast.
+ * Reinforce borders so interactive elements remain visible.
+ */
+body.vscode-high-contrast {
+  --color-border: var(--vscode-contrastBorder);
+  --color-ring:   var(--vscode-contrastActiveBorder, var(--vscode-focusBorder));
+}
+
+/*
+ * Scrollbar — match VS Code's minimal scrollbar style.
+ */
+::-webkit-scrollbar        { width: 8px; height: 8px; }
+::-webkit-scrollbar-track  { background: transparent; }
+::-webkit-scrollbar-thumb  {
+  background: var(--vscode-scrollbarSlider-background);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vscode-scrollbarSlider-hoverBackground);
+}

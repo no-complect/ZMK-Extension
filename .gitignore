@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Packaged extension
+*.vsix
+
+# Compiled native binary (rebuilt from source via build:native)
+bin/zmk-ble-helper
+
+# Logs
+*.log
+zmk-studio.log
+
+# VS Code workspace settings
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+
+# macOS
+.DS_Store
+
+# Environment / secrets
+.env
+.env.local
+
+# Personal ZMK keyboard config (not part of the extension)
+zmk-config/
+
+# Local west workspace (created via npm run setup:west)
+west-workspace/
+
+# Runtime keymap exports
+keymaps/

@@ -1,0 +1,12 @@
+// Placeholder keymap — real file would contain ZMK keymap bindings
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+
+/ {
+    keymap {
+        compatible = "zmk,keymap";
+        default_layer {
+            bindings = <&kp A>;
+        };
+    };
+};
