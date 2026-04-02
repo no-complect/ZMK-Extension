@@ -99,7 +99,7 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run build:native && npm run build",
-    "build:native": "clang -fobjc-arc -framework CoreBluetooth -framework Foundation -o bin/zmk-ble-helper native/zmk-ble-helper.m",
+    "build:native": "mkdir -p bin && clang -fobjc-arc -framework CoreBluetooth -framework Foundation -o bin/zmk-ble-helper native/zmk-ble-helper.m",
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
     "dev:full": "npm run build:native && npm run dev",
